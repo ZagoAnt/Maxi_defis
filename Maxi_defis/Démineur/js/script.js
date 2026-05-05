@@ -1,0 +1,376 @@
+/* Timer ------------------------------------------------------------------------------------------------------------------------ */
+/* Variables -------------------------------------------------------- */
+let minute = 0; 
+let seconde = 0;
+
+/* Fonction --------------------------------------------------------- */
+
+/* Modifie le timer sur le Html */
+function displayTimer(){
+    document.getElementById("timer").textContent = `Temps : ${minute.toString().padStart(2,'0')}:${seconde.toString().padStart(2,'0')}`;
+}
+
+/* Indente le temps */
+function Timer(){
+    if (seconde == 60) {
+        seconde = 0;
+        minute++;
+    }
+    seconde++;
+    displayTimer();
+}
+
+/* En combinaison de Timer() et setInterval() permet de mettre en place un décompte toute les secondes */
+function ongoingTimer(){
+    time = setInterval(Timer,1000); /* (function,delay) */
+}
+
+/* Commence le timer et désactive le bouton pour éviter le multiple lancement de ongoingTimer() */
+function startTimer(){
+    ongoingTimer();
+    document.getElementById("start").style.display = "none";
+}
+
+/* Arrete le timer et réactive le boutton */
+function stopTimer(){
+    clearInterval(time);
+}
+
+/* Arrete via stopTimer() et reinisialise le timer */
+function resetTimer(){
+    stopTimer();
+    minute = 0;
+    seconde = 0;
+    displayTimer();
+}
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+
+/* Plateau ------------------------------------------------------------------------------------------------------------------------- */
+/* Variable */
+let tab = [];
+let compteurCorrect = 0;
+let compteurCible = 0;
+let ongoingGame = false;
+let nbBombe = 0;
+let nbDrapeau = 0;
+let td = [];
+let explosion = 0;
+let premierCoup = 1;
+
+/* Création de l'énigme */
+function randomTab(taille){
+    for(let i = 0; i<taille; i++){
+        tab[i] = [];
+        for(let j = 0; j<taille*2; j++){
+            let random = Math.random();
+            if(random>=0.15){
+                tab[i][j] = 1;
+            }
+            else{
+                tab[i][j] = 0;
+                nbBombe++;
+            }
+            compteurCible += tab[i][j];
+        }
+    }
+}
+
+/* Création de la grille de jeu */
+function creer(taille) {
+    let table = document.createElement("table");
+    table.id = "démineur";
+    for(let i = 0; i<taille; i++){
+        td[i] = [];
+        let ligne = document.createElement("tr");
+        for(let j = 0;j<taille*2;j++){
+            var colonne = document.createElement("td");
+            colonne.dataset.value = tab[i][j];
+            colonne.dataset.i = i;
+            colonne.dataset.j = j;
+            colonne.classList.add("hidden");
+            td[i][j] = colonne;
+            colonne.dataset.nbBombe = indice(i,j,taille);
+            colonne.addEventListener("mousedown",function() {coup(this,taille,event);});
+            ligne.appendChild(colonne);
+        }
+        table.appendChild(ligne);
+    }
+    plateau.appendChild(table);
+}
+
+/* Donne le nombre de bombe qui se trouve autour de la case */
+function indice(i,j,taille){
+    let nbBombe = 0;
+    let caseValide = 0;
+    for (let di = -1; di <= 1; di++) {
+        for (let dj = -1; dj <= 1; dj++) {
+            if (di === 0 && dj === 0) continue;
+            let ni = i + di;
+            let nj = j + dj;
+            if (ni >= 0 && ni < taille && nj >= 0 && nj < taille * 2) {
+                nbBombe += tab[ni][nj];
+                caseValide++;
+            }
+        }
+    }
+    return Math.abs(caseValide-nbBombe);
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+
+/* Partie -------------------------------------------------------------------------------------------------------------------------- */
+/* Fonction qui traite les différentes entrées réalisé par le joueur */
+function coup(c,taille,event){
+    if(ongoingGame == true){
+        /* Le joueur clique gauche */
+        if(event.button === 0 && !c.classList.contains("drapeau")){ // On ne peut pas révélé une case avec un drapeau
+            let valeur = c.dataset.value;
+            if (valeur === "0"){
+                if(premierCoup == 1){
+                    c.dataset.value = 1;
+                    nbBombe--;
+                    compteurCible++;
+                    compteurCorrect++;
+                    c.classList.remove("hidden");
+                    c.classList.add("correct");
+                    c.style.backgroundImage = `url('../image/${c.dataset.nbBombe}.png')`;
+                    for (let di = -1; di <= 1; di++) {
+                        for (let dj = -1; dj <= 1; dj++) {
+                            if (di === 0 && dj === 0) continue;
+                            let ni = i + di;
+                            let nj = j + dj;
+                            if (ni >= 0 && ni < taille && nj >= 0 && nj < taille * 2) {
+                                td[ni][nj].dataset.nbBombe--;
+                            }
+                        }
+                    }
+                }
+                else{
+                    /* Le joueur clique sur une bombe */
+                    c.classList.remove("hidden");
+                    c.classList.add("bombe");
+                    document.body.classList.add('shake');
+                    setTimeout(() => {document.body.classList.remove('shake');}, 300);
+                    explosion++;
+                }
+            }
+            else{
+                /* Le joueur clique sur une case sans danger */
+                c.classList.add("correct");
+                if(c.dataset.nbBombe!=0){
+                    /* La case est près d'une bombe */
+                    c.classList.remove("hidden");
+                    c.style.backgroundImage = `url('../image/${c.dataset.nbBombe}.png')`;
+                    compteurCorrect++;
+                }
+                else{
+                    /* La case n'a pas de bombe autour */
+                    safeZone(c,taille); //On révèle alors toutes les autres cases sans danger dans la zone
+                }   
+            }
+        }
+        /* Le joueur clique droit */
+        else if(event.button === 2){
+            /* Retire le drapeau s'il est présent sur la case */
+            if(c.classList.contains("drapeau")){
+                c.classList.remove("drapeau");
+                nbDrapeau--;
+                displayFlag();
+            }
+            /* Sinon en ajoute un sur la case */
+            else{
+                c.classList.add("drapeau");
+                nbDrapeau++;
+                displayFlag();
+            } 
+        }
+        premierCoup = 0;  
+    }
+}
+
+/* On révèle les cases sans danger via récursivité autour d'une case sans danger révélé par le joueur */
+function safeZone(c,taille){
+    // Bombe
+    if (c.dataset.value === "0") {
+        return;
+    }
+    // Déja révélé
+    if (!c.classList.contains("hidden")) {
+        return;
+    }
+    // On récupère les indices sous forme de int
+    let i = parseInt(c.dataset.i);
+    let j = parseInt(c.dataset.j);
+    // On révèle dans tous les autres cas
+    c.classList.remove("hidden");
+    c.classList.add("correct");
+    compteurCorrect++;
+    // Si la case à un indice on la révèle et on s'arrête
+    if (c.dataset.nbBombe !== "0") {
+        c.style.backgroundImage = `url('../image/${c.dataset.nbBombe}.png')`;
+        return;
+    }
+    // Si c'est une safe zone alors on regarde au alentour s'il y en a d'autre
+    for (let di = -1; di <= 1; di++) {
+        for (let dj = -1; dj <= 1; dj++) {
+            if (di === 0 && dj === 0) continue;
+            let ni = i + di;
+            let nj = j + dj;
+            if (ni >= 0 && ni < taille && nj >= 0 && nj < taille * 2) {
+                safeZone(td[ni][nj], taille); // Appel récursif
+            }
+        }
+    }
+}
+
+/* Révèle la grille */
+function reveal(taille){
+    for(let i = 0; i<taille; i++){
+        for(let j = 0; j<taille*2; j++){
+            td[i][j].classList.remove("hidden");
+            if(td[i][j].dataset.value === "1"){
+                td[i][j].classList.add("correct");
+                if(td[i][j].dataset.nbBombe!=0){
+                    td[i][j].style.backgroundImage = `url('../image/${td[i][j].dataset.nbBombe}.png')`;
+                }
+            }
+            else{
+                td[i][j].classList.add("bombe");
+            }
+        }
+    }
+}
+
+/* Indique le nombre de bombe actuellement prsente sur le plateau sur le Html */
+function displayBomb(){
+    document.getElementById("bomb").textContent = `Bombe : ${nbBombe.toString()}`;
+}
+
+/* Indique le nombre de drapeau actuellement prsente sur le plateau sur le Html */
+function displayFlag(){
+    document.getElementById("flag").textContent = `Drapeau : ${nbDrapeau.toString()}`;
+}
+
+/* Fonction correspondant à la condition de victoire ou de défaite */
+function isWon(taille){
+    let message = "";
+    if (compteurCorrect == compteurCible && seconde != 0){ // Victoire
+        document.body.classList.add("win-background");
+        message = "Victoire";
+        boiteFin(message);
+        ongoingGame = false;  // On arrête la partie
+        stopTimer();          // On arrête le timer
+        clearInterval(game);  // On arrête l'intervalle de vérification de la condition de victoire
+    }
+    if (explosion == 1 || minute == 0 && seconde == 0){ // Défaite
+        document.body.classList.add("defeat-background");
+        message = "Défaite";
+        ongoingGame = false;
+        stopTimer();
+        clearInterval(game);
+        reveal(taille); // On révèle la grille pour montrer au joueur son erreur
+        setTimeout(()=>{boiteFin(message);},3300);
+    }
+}
+
+/* Fonction correspondant à la partie permettant de lancer le timer et la vérification des conditions de victoire et de défaite */
+function gameStart(taille){
+    randomTab(taille);                                  // On crée l'égnigme
+    creer(taille);                                     // On la génère à l'écran
+    displayBomb();                                    // On affiche le nombre de bombe au total
+    startTimer();                                    // On commence le timer
+    ongoingGame = true;                             // On lance la partie
+    game = setInterval(()=>{isWon(taille);},1000); // On lance l'intervalle pour vérifier la condition de victoire
+}
+
+document.getElementById("facile").addEventListener("click",function() {gameStart(8);});
+document.getElementById("moyen").addEventListener("click",function() {gameStart(16);});
+document.getElementById("difficile").addEventListener("click",function() {gameStart(24);});
+document.addEventListener('contextmenu', function (event) {event.preventDefault();}); //Empêche l'apparition du menu en faisant clic droit
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Message de Fin ---------------------------------------------------------------------------------------------------------------------------------------------------*/
+function boiteFin(message) {
+    // Création du fond sombre
+    let fond = document.createElement("div");
+    fond.style.position = "fixed";
+    fond.style.top = "0";
+    fond.style.left = "0";
+    fond.style.width = "100%";
+    fond.style.height = "100%";
+    fond.style.background = "rgba(0, 0, 0, 0.5)";
+    fond.style.display = "flex";
+    fond.style.justifyContent = "center";
+    fond.style.alignItems = "center";
+    fond.style.zIndex = "1000";
+
+    // Création de la boîte de victoire
+    let fondb = document.createElement("div");
+    fondb.style.background = "white";
+    fondb.style.padding = "20px";
+    fondb.style.borderRadius = "10px";
+    fondb.style.boxShadow = "0px 0px 10px rgba(0, 0, 0, 0.2)";
+    fondb.style.textAlign = "center";
+    fondb.style.width = "300px";
+
+    // Ajout du message de victoire
+    let titre = document.createElement("h2");
+    titre.style.color = "black";
+    titre.textContent = message;
+
+    // Bouton de fermeture
+    let retourMenu = document.createElement("button");
+    retourMenu.textContent = "OK";
+    retourMenu.style.marginTop = "10px";
+    retourMenu.style.padding = "10px";
+    retourMenu.style.border = "none";
+    retourMenu.style.background = "#28a745";
+    retourMenu.style.color = "white";
+    retourMenu.style.borderRadius = "5px";
+    retourMenu.style.cursor = "pointer";
+
+    // Création du formulaire
+    let form = document.createElement("form");
+    form.method = "POST";
+    form.action = window.location.href;
+    form.style.display = "flex";
+    form.style.flexDirection = "column";
+    form.style.alignItems = "center";
+    form.style.gap = "10px";
+    form.style.marginTop = "20px";
+
+    // Création de l'input texte
+    let pseudo = document.createElement("input");
+    pseudo.setAttribute("type", "text");
+    pseudo.setAttribute("placeholder", "Entrez votre pseudo");
+    pseudo.name="pseudo";
+    pseudo.style.padding = "8px";
+    pseudo.style.border = "1px solid #ccc";
+    pseudo.style.borderRadius = "5px";
+    pseudo.style.width = "200px";
+
+    // Création du bouton submit
+    let submitButton = document.createElement("input");
+    submitButton.type = "submit"
+    submitButton.textContent = "Sauvegarder";
+    submitButton.style.padding = "8px 12px";
+    submitButton.style.border = "none";
+    submitButton.style.background = "#007BFF";
+    submitButton.style.color = "white";
+    submitButton.style.borderRadius = "5px";
+    submitButton.style.cursor = "pointer";
+
+    // Assemblage des éléments
+    fondb.appendChild(titre);
+    fondb.appendChild(form);
+    form.appendChild(pseudo);
+    form.appendChild(submitButton);
+    fond.appendChild(fondb);
+    document.body.appendChild(fond);
+}
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Sauvegarde -------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/

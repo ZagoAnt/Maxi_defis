@@ -1,0 +1,142 @@
+table {
+  border-collapse: collapse;
+  margin: 20px auto;
+  table-layout: fixed;
+  width: 80%;
+  height: 80%;
+  max-width: 600px;
+  max-height: 600px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+  height: 60px;
+  width: 60px;
+  padding: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+td {
+  border: 1px solid #ccc;
+  height: 60px;
+  width: 60px;
+  vertical-align: middle;
+  transition: background-color 0.2s;
+  background-color: #66BB6A;
+}
+
+td:hover {
+  background-color: #f1f1f1;
+}
+
+.erreur {
+  height: 60px;
+  background-image: url("../image/croix.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.correct {
+  background-color: black;
+  pointer-events: none;
+}
+
+.eviter {
+  background-color: grey;
+  pointer-events: none;
+}
+
+#heart {
+    display: flex;
+    justify-content: center;
+    align-items: center;     
+    gap: 10px;      
+}
+
+#timer {
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border: none;
+  width: 125px;
+  height: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #66BB6A;
+  text-align: center;
+}
+
+.heart {
+    display: block;
+    width: 36px;
+    height: 36px;
+    background-image: url('../image/coeur_plein.png');
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+}
+
+body {
+  background-color: #6ae4be;
+  color: white;
+}
+
+.win-background {
+    background: #4CAF50 !important; /* Vert pour la victoire */
+}
+
+.defeat-background {
+    background: #f44336 !important; /* Vert pour la victoire */
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-5px, 5px); }
+  40% { transform: translate(5px, -5px); }
+  60% { transform: translate(-5px, 5px); }
+  80% { transform: translate(5px, -5px); }
+  100% { transform: translate(0, 0); }
+}
+
+.shake {
+  animation: shake 0.3s;
+  background-color: red;
+}
+
+#first {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);  
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #66BB6A, #388E3C);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+

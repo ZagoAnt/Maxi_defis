@@ -1,0 +1,128 @@
+table {
+  border-collapse: collapse;
+  margin: 20px auto;
+  table-layout: fixed;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+td {
+  border: 1px solid #ccc;
+  margin : 60px;
+  aspect-ratio:1/1;
+  height : 30px;
+  width : 30px;
+  vertical-align: middle;
+  transition: background-color 0.2s;
+}
+
+td:hover {
+  background-color: #f1f1f1;
+}
+
+#affichage{
+  display: flex;
+  justify-content: center;
+  align-items: center;     
+  gap: 10px; 
+}
+
+.affichage{  
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border: none;
+  width: 125px;
+  height: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #66BB6A;
+  text-align: center;
+}
+
+body {
+  background-color: #6ae4be;
+  color: white;
+}
+
+.win-background {
+    background: #4CAF50 !important; /* Vert pour la victoire */
+}
+
+.defeat-background {
+    background: #f44336 !important; /* Vert pour la victoire */
+}
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-5px, 5px); }
+  40% { transform: translate(5px, -5px); }
+  60% { transform: translate(-5px, 5px); }
+  80% { transform: translate(5px, -5px); }
+  100% { transform: translate(0, 0); }
+}
+
+.shake {
+  animation: shake 0.3s;
+  background-color: red;
+}
+
+#start {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);  
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #4CAF50, #2E7D32);
+  color: white;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #66BB6A, #388E3C);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.correct {
+  background-color: #2E7D32;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.hidden {
+    background-color: #66BB6A;
+}
+
+.bombe {
+    background-color: red;
+    pointer-events: none;
+    height: 30px;
+    background-image: url("../image/bombe.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.drapeau {
+  height: 30px;
+  background-image: url("../image/drapeau.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
