@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu des équations</title>
+    <link rel="stylesheet" href="equation.css">
+</head>
+<body>
+    <div class="game-container">
+        <h2>Jeu des équations</h2>
+        <p>Trouve les signes qui rendent chaque équation vraie.</p>
+        
+        <div class="equation-line">
+            <span id="number1"></span>
+            <select id="opSelect1"></select>
+            <span id="number2"></span>
+            <select id="opSelect2"></select>
+            <span id="number3"></span>
+            <span id="equalSign">=</span>
+            <span id="targetValue"></span>
+        </div>
+
+        <div class="button-container">
+            <button id="btnVerify" class="btn-verify">Vérifier</button>
+            <button id="btnReplay" class="btn-replay" style="display: none;">Rejouer</button>
+        </div>
+
+        <p id="message" class="message"></p>
+    </div>
+
+    <script src="equation.js"></script>
+</body>
+</html>

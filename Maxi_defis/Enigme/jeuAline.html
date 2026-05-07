@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu d'énigmes</title>
+    <link rel="stylesheet" href="jeuAline.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Jeu d'énigmes</h1>
+
+        <div id="game">
+            <p id="timer">Temps : 0 s</p>
+            <p id="question"></p>
+
+            <input type="text" id="answer" placeholder="Votre réponse">
+            <button onclick="checkAnswer()">Valider</button>
+        </div>
+
+        <div id="result" class="hidden"></div>
+    </div>
+
+    <script src="scriptJeuAline.js"></script>
+</body>
+</html>
+

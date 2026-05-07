@@ -1,0 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #6ae4be;
+    background-image : url('images/backEquation.png');
+    background-size: cover;
+    transition: background-color 0.3s ease;
+}
+
+.game-container {
+    width: 400px;
+    margin: 100px auto;
+    background: #6ae4be;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border : solid 10px rgb(28, 93, 103);
+}
+
+h2 {
+    margin-top: 0;
+}
+
+p {
+    margin: 10px 0;
+}
+
+.equation-line {
+    margin: 20px 0;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+select {
+    font-size: 24px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.button-container {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+button {
+    font-size: 18px;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-verify {
+    background-color: white;
+}
+
+.btn-verify:hover:not(:disabled) {
+    background-color: rgb(28, 93, 103);
+}
+
+.btn-replay:hover:not(:disabled) {
+    background-color: rgb(28, 93, 103);
+}
+
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.message {
+    min-height: 24px;
+    margin-top: 10px;
+    font-weight: bold;
+}

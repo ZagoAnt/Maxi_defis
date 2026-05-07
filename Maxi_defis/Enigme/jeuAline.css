@@ -1,0 +1,47 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #6ae4be;
+    background-image : url('images/backEnigme.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.win-background {
+    border : #4CAF50 !important; /* Vert pour la victoire */
+}
+
+.game-container {
+    width: 400px;
+    margin: 100px auto;
+    background: #6ae4be;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border : solid 10px rgb(28, 93, 103);
+}
+
+input {
+    width: 80%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+    background-color: rgb(28, 93, 103);
+}
+
+.hidden {
+    display: none;
+}
