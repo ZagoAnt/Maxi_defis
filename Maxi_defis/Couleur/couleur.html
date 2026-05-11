@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu Stroop - Couleurs</title>
+    <link rel="stylesheet" href="couleur.css">
+</head>
+<body>
+    <div class="game-container">
+        <h2>Couleurs</h2>
+        <p>Clique sur la couleur écrite dans sa bonne couleur le plus rapidement possible!</p>
+        
+        <div class="score">Score: <span id="score">0</span></div>
+        
+        <div class="colors-grid" id="colorsGrid">
+            <!-- Les couleurs seront générées par JavaScript -->
+        </div>
+        
+        <div class="message" id="message"></div>
+
+        <h3 id="timer-container">Temps restant : <span id="timer">10</span>s</h3>
+        
+        <div class="button-container">
+            <button class="btn-replay" id="replayBtn" style="display: none;">Rejouer</button>
+        </div>
+    </div>
+
+    <script src="couleur.js"></script>
+</body>
+</html>
