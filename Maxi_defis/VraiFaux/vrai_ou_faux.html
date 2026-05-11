@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vrai ou Faux</title>
+    <link rel="stylesheet" href="vrai_ou_faux.css">
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>Vrai ou Faux</h1>
+        <h2>La question est la suivante.</h2>
+
+        <p id="question"></p>
+
+        <button class="rep" onclick="repondre(true)">Vrai</button>
+        <button class="rep" onclick="repondre(false)">Faux</button>
+
+        <br><br>
+
+        <button id="btnQuestion" onclick="startGame()" style="display:none;">
+            Rejouer
+        </button>
+
+        <h3 id="timer-container">Temps restant : <span id="timer">10</span>s</h3>
+
+        <p id="resultat"></p>
+    </div>
+    <script src="vrai_ou_faux.js"></script>
+</body>
+</html>
