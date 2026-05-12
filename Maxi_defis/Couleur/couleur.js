@@ -17,6 +17,8 @@ let gameActive = true;
 let timerInterval = null;
 let temps = 10;
 
+document.addEventListener('contextmenu', function (event) {event.preventDefault();}); //Empêche l'apparition du menu en faisant clic droit
+
 // Initialiser le jeu
 function initGame() {
     score = 0;

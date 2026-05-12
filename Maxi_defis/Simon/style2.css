@@ -1,0 +1,169 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+    margin: 0;
+    font-family:'Times New Roman', Times, serif;
+}
+
+header {
+    margin-bottom: 40%;
+}
+
+h1{
+    color: white;
+    text-decoration: underline;
+    font-family: 'Times New Roman', Times, serif;
+    white-space: nowrap;
+    position: absolute;
+    top: 10px; /* Distance par rapport au haut de la page */
+    left: 10px; /* Distance par rapport au bord droit de la page */
+    margin-left: 2%;
+}
+
+h2{
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+    position: absolute;
+    top: 40%; /* Distance par rapport au haut de la page */
+    right: 8%; /* Distance par rapport au bord droit de la page */
+}
+
+.jeu-container {
+    display: flex;
+    justify-content: center; /* Centre horizontalement le contenu */
+    align-items: center; /* Centre verticalement le contenu */
+    position: relative; /* Nécessaire pour positionner les éléments internes */
+    left: 3.5%;
+}
+
+.jeu_simon {
+    display: grid;
+    grid-template-columns: repeat(3, 200px);
+    grid-template-rows: repeat(2, 200px);
+    gap: 20px;
+    position: relative;
+    margin-right: 24%;
+}
+
+.couleur{
+    width: 200px;
+    height: 200px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.bonFaux{
+    display: grid;
+    grid-template-rows: repeat(2, 30px);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.rougeVert{
+    width: 30px;
+    height: 30px;
+    border-radius: 3px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    position: absolute;
+    top: 50%; /* Distance par rapport au haut de la page */
+    right: 10%; /* Distance par rapport au bord droit de la page */
+}
+
+.checkVert{
+    background-color: green;
+}
+
+.vert-fonce{
+    background-color: rgb(10, 58, 10);
+    border-top-left-radius: 100%;
+}
+
+.rose{
+    background-color: pink;
+}
+
+.blanc{
+    background-color: white;
+    border-top-right-radius: 100%;
+}
+
+.bleu-ciel{
+    background-color: cyan;
+    border-bottom-left-radius: 100%;
+}
+
+.orange{
+    background-color: orange;
+}
+
+.violet{
+    background-color: purple;
+    border-bottom-right-radius: 100%;
+}
+
+#commencer {
+    position: absolute;
+    top: 39%;
+    left: 56.8%;
+    height: 0%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+#commencer img {
+    display: block;
+    width: 46%
+}
+
+.popup{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content{
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    position: relative;
+}
+
+.close{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#retour {
+    position: absolute;
+    top: 10px; /* Distance par rapport au haut de la page */
+    right: 10px; /* Distance par rapport au bord droit de la page */
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px 20px; /* Ajout de padding pour un meilleur rendu */
+    background-color: black; /* Couleur de fond */
+    border: 1px solid rebeccapurple; /* Bordure */
+    border-radius: 5px; /* Coins arrondis */
+    color: white; /* Couleur du texte */
+    text-decoration: none; /* Supprime le soulignement */
+}
+#retour:hover:not(:disabled) {
+    background-color: rgb(153, 91, 170);
+    color: white;
+}

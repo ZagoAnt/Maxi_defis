@@ -25,6 +25,22 @@ input {
     margin: 10px 0;
 }
 
+#retour-menu {
+    margin: 100px auto;
+    display: block;
+    cursor: pointer;
+    background-color: rgb(28, 93, 103);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#retour-menu:hover {
+    background-color: #4CAF50;
+    transform: scale(1.05);
+}
+
 button {
     padding: 10px 20px;
     cursor: pointer;
