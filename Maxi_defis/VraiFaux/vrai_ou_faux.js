@@ -49,6 +49,11 @@ let intervalTimer = null;
 function startGame() {
     score = 0;
     document.getElementById("resultat").textContent = "";
+    // Masquer la modale et afficher le jeu
+    document.getElementById('auth-modal').style.display = 'none';
+    document.querySelector('.game-container').style.display = 'block';
+    // Afficher le bouton retour en bas
+    document.getElementById('retour-menu-bas').style.display = 'block';
     nouvelleQuestion();
 }
 
@@ -85,13 +90,26 @@ function demarrerTimer() {
 }
 
 function endGame(message = "Mauvaise réponse.") {
-    document.getElementById("resultat").textContent = `${message} Score final : ${score}.`;
-    document.getElementById("timer-container").style.display = "none";
-    document.getElementById("btnQuestion").style.display = "inline-block";
-    document.getElementById("btnQuestion").disabled = false;
+    // Masquer le jeu et le bouton retour en bas
+    document.querySelector('.game-container').style.display = 'none';
+    document.getElementById('retour-menu-bas').style.display = 'none';
+    // Afficher la modale
+    document.getElementById('auth-modal').style.display = 'block';
+    // Afficher le score
+    document.getElementById('final-score').textContent = score;
+    // Masquer les boutons et afficher le formulaire
+    document.getElementById('auth-form').style.display = 'block';
+    document.getElementById('rejouer-btn').style.display = 'none';
+    document.getElementById('retour-menu-modal').style.display = 'none';
+    // Vider les champs du formulaire
+    document.getElementById('pseudo').value = '';
+    document.getElementById('password').value = '';
+    // Désactiver les boutons du jeu
     document.querySelectorAll("button[onclick^='repondre']").forEach(btn => {
         btn.disabled = true;
     });
+    document.getElementById("btnQuestion").style.display = "none";
+    document.getElementById("timer-container").style.display = "none";
 }
 
 function repondre(reponseUtilisateur) {
@@ -114,4 +132,20 @@ function repondre(reponseUtilisateur) {
         endGame();
     }
 }
+
+// Gestion de l'authentification
+document.getElementById('auth-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const pseudo = document.getElementById('pseudo').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if (pseudo && password) {
+        // Authentification réussie (simple vérification)
+        document.getElementById('auth-form').style.display = 'none';
+        document.getElementById('rejouer-btn').style.display = 'block';
+        document.getElementById('retour-menu-modal').style.display = 'block';
+    } else {
+        alert('Veuillez remplir tous les champs.');
+    }
+});
+
 window.onload = startGame;
