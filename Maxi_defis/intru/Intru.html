@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Intru.css">
+
+</head>
+<body>
+    <div id="level">Niveau 1</div>
+    <div id="score-container">
+      <span>Score: <span id="score">0</span></span>
+      <span>Temps: <span id="timer">90</span>s</span>
+    </div>
+    <div id="explanation-left" class="explanation"></div>
+    <div class="carre" id="carre"></div>
+    <div id="explanation-right" class="explanation"></div>
+    
+    <!-- Modale de fin de jeu -->
+    <div id="gameOverModal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Jeu Terminé!</h2>
+        <p>Dernier niveau complété: <span id="finalLevel">8</span></p>
+        <p>Score final: <span id="finalScore">0</span></p>
+        <p>
+          <label for="playerName">Entrez votre pseudo :</label><br>
+          <input type="text" id="playerName" placeholder="Pseudo" autocomplete="off">
+        </p>
+        <div class="modal-buttons">
+          <button id="replayBtn" disabled>Rejouer</button>
+          <button id="menuBtn" disabled>Retour au menu</button>
+        </div>
+      </div>
+    </div>
+    
+    <script src="Intru.js"></script>
+</body>
+</html>
