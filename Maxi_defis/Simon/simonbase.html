@@ -31,6 +31,27 @@
             <p id="popupMessage"></p>
         </div>
     </div>
+    <div id="auth-modal" class="auth-modal" style="display: none;">
+        <div class="auth-modal-content">
+            <h2>Authentification requise</h2>
+            <form id="auth-form">
+                <label for="pseudo-auth">Pseudo :</label>
+                <input type="text" id="pseudo-auth" required>
+                <br>
+                <button type="submit">Valider</button>
+            </form>
+            <div id="lost-info" style="display:none; margin-top: 20px; text-align: left;"></div>
+            <button id="rejouer-auth-btn" type="button" style="display:none; margin-top: 20px;">
+                Rejouer
+            </button>
+            <button id="retour-menu-auth-btn" type="button" style="display:none; margin-top: 10px;">
+                Retour au menu
+            </button>
+            <button id="retour-home-auth-btn" type="button" style="display:none; margin-top: 10px;">
+                Retour à l'accueil
+            </button>
+        </div>
+    </div>
     <div>
         <button id="retour" onclick="goBackHome()">
             Retour à la page d'accueil

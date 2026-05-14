@@ -285,8 +285,9 @@ function checkSequence(game) {
             const endTime = new Date().getTime();
             const reactionTime = ((endTime - startTime) / 1000).toFixed(2); // Temps en secondes
 
-            // Affiche le popup avec le message de défaite
-            showPopup(`Mauvaise couleur ! Vous avez perdu au niveau ${niveauActuel}. Temps de réaction : ${reactionTime} secondes.`);
+            document.querySelector('.jeu-container').style.display = 'none';
+            document.querySelector('body').style.background = '#f44336';
+            showAuthModal(niveauActuel, reactionTime);
 
             // Change checkVert en rouge et l'allume
             checkVert.style.color = "red";
@@ -327,6 +328,67 @@ function showPopup(message) {
         console.error("Popup or PopupMessage element not found.");
     }
 }
+
+function showAuthModal(score, reactionTime) {
+    const music = new Audio("audio/emotioDfin.mp3");
+    music.play().catch(() => {
+        // Ignorer les erreurs de lecture automatique si le navigateur bloque le son.
+    });
+    const authModal = document.getElementById('auth-modal');
+    authModal.style.display = 'flex';
+    const gameContainer = document.querySelector('.jeu-container') || document.querySelector('.piano');
+    if (gameContainer) {
+        gameContainer.style.display = 'none';
+    }
+    document.getElementById('auth-form').style.display = 'block';
+    document.getElementById('lost-info').style.display = 'none';
+    document.getElementById('rejouer-auth-btn').style.display = 'none';
+    document.getElementById('retour-menu-auth-btn').style.display = 'none';
+    document.getElementById('retour-home-auth-btn').style.display = 'none';
+    document.getElementById('pseudo-auth').value = '';
+    document.getElementById('lost-info').innerHTML = `<p><strong>Score :</strong> ${score}</p>
+        <p><strong>Temps de réaction :</strong> ${reactionTime} s</p>`;
+}
+
+function setupAuthModal() {
+    document.getElementById('auth-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const pseudo = document.getElementById('pseudo-auth').value.trim();
+        if (pseudo) {
+            document.getElementById('auth-form').style.display = 'none';
+            document.getElementById('lost-info').style.display = 'block';
+            document.getElementById('rejouer-auth-btn').style.display = 'inline-block';
+            document.getElementById('retour-menu-auth-btn').style.display = 'inline-block';
+            document.getElementById('retour-home-auth-btn').style.display = 'inline-block';
+        } else {
+            alert('Veuillez remplir votre pseudo.');
+        }
+    });
+
+    document.getElementById('rejouer-auth-btn').addEventListener('click', function () {
+        const authModal = document.getElementById('auth-modal');
+        authModal.style.display = 'none';
+        document.querySelector('.jeu-container').style.display = 'flex';
+        document.querySelector('body').style.background = 'black';
+        if (difficulty === 1) {
+            jeux.simonBase.start();
+        } else if (difficulty === 2) {
+            jeux.simonMoy.start();
+        } else if (difficulty === 3) {
+            jeux.piano.start();
+        }
+    });
+
+    document.getElementById('retour-menu-auth-btn').addEventListener('click', function () {
+        window.location.href = '../menu.html';
+    });
+
+    document.getElementById('retour-home-auth-btn').addEventListener('click', function () {
+        window.location.href = 'pagedebut.html';
+    });
+}
+
+setupAuthModal();
 
 function resetCheck() {
     checkVert.style.color = "green";
