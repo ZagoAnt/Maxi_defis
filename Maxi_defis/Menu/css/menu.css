@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #6ae4be;
+    background-image : url('images/backVraiFaux.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-container {
+    width: 600px;
+    margin: 100px auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    border: solid 10px rgb(28, 93, 103);
+}
+
+.menu-container h1 {
+    color: rgb(28, 93, 103);
+    margin-bottom: 20px;
+    font-size: 2.5em;
+}
+
+.menu-container p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.game-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.game-buttons button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    cursor: pointer;
+    background-color: rgb(28, 93, 103);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: bold;
+}
+
+.game-buttons button:hover {
+    background-color: #4CAF50;
+    transform: scale(1.05);
+}
+
+.game-container {
+    width: 400px;
+    margin: 100px auto;
+    background: #6ae4be;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border: solid 10px rgb(28, 93, 103);
+}
+
+input {
+    width: 80%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.hidden {
+    display: none;
+}
