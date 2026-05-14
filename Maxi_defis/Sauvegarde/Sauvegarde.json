@@ -1,37 +1,43 @@
 {
-    "connect": "good",
-    "jeux":[
+  "connect": "good",
+  "jeux": [
+    {
+      "nom": "couleur",
+      "partie": []
+    },
+    {
+      "nom": "demineur",
+      "partie": [
         {
-            "nom": "couleur",
-            "partie":[]
-        },
-        {
-            "nom": "demineur",
-            "partie":[]
-        },
-        {
-            "nom": "enigme",
-            "partie":[]
-        },
-        {
-            "nom": "equation",
-            "partie":[]
-        },
-        {
-            "nom": "nonogram",
-            "partie":[]
-        },
-        {
-            "nom": "simon",
-            "partie":[]
-        },
-        {
-            "nom": "vraifaux",
-            "partie":[]
-        },
-        {
-            "nom": "intru",
-            "partie":[]
+          "pseudo": "Antoine",
+          "victoire": 0,
+          "temps": "00:02"
         }
-    ]
+      ]
+    },
+    {
+      "nom": "enigme",
+      "partie": []
+    },
+    {
+      "nom": "equation",
+      "partie": []
+    },
+    {
+      "nom": "nonogram",
+      "partie": []
+    },
+    {
+      "nom": "simon",
+      "partie": []
+    },
+    {
+      "nom": "vraifaux",
+      "partie": []
+    },
+    {
+      "nom": "intru",
+      "partie": []
+    }
+  ]
 }
