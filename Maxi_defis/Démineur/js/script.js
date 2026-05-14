@@ -396,7 +396,7 @@ async function sauvegarde(){
     const proprio = "ZagoAnt";
     const repo = "Maxi_defis";
     const path = "Maxi_defis/Sauvegarde/Sauvegarde.json";
-    const GITHUB_TOKEN = "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";
+    const GITHUB_TOKEN = "";
 
     // Url de l'API GitHub pour nos modifications
     const apiURL = `https://api.github.com/repos/${proprio}/${repo}/contents/${path}`;
