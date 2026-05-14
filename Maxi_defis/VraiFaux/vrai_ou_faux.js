@@ -47,6 +47,11 @@ let temps = 10;
 let intervalTimer = null;   
 
 function startGame() {
+    document.body.style.backgroundImage = "url('images/backVraiFaux.png')";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundAttachment = "fixed";
     score = 0;
     document.getElementById("resultat").textContent = "";
     // Masquer la modale et afficher le jeu
@@ -122,6 +127,8 @@ function repondre(reponseUtilisateur) {
         }, 700);
     } else {
         document.querySelector('.game-container').style.border = '10px solid #f44336';
+        document.querySelector('body').style.background = '#f44336';
+
         setTimeout(() => {
             document.querySelector('.game-container').style.border = '10px solid rgb(28, 93, 103)';
         }, 500);

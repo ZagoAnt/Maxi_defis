@@ -37,8 +37,15 @@ function startGame() {
     resultEl.classList.add("hidden");
     gameEl.classList.remove("hidden");
     document.body.classList.remove("win-background"); // Réinitialiser le fond
-    document.body.style.backgroundColor = "#6ae4be";
+    document.body.style.backgroundImage = "url('images/backEnigme.png')";
+    document.body.style.backgroundSize = "cover";
+    document.body.style.backgroundRepeat = "no-repeat";
+    document.body.style.backgroundPosition = "center";
+    document.body.style.backgroundAttachment = "fixed";
+    document.querySelector('.game-container').style.display = 'block';
     document.querySelector('.game-container').style.border = '10px solid rgb(28, 93, 103)';
+    document.getElementById('auth-modal').style.display = 'none';
+    document.getElementById('lost-info').style.display = 'none';
     startTime = Date.now();
     timerInterval = setInterval(updateTimer, 1000);
 
@@ -83,31 +90,60 @@ function endGame(win, correct = "") {
     const timeSpent = Math.floor((Date.now() - startTime) / 1000);
 
     gameEl.classList.add("hidden");
-    resultEl.classList.remove("hidden");
+    resultEl.classList.add("hidden");
 
     if (win) {
         document.body.classList.add("win-background"); // Changer le fond en vert
+        showResultScreen(true, timeSpent, correctAnswers);
     } else {
-        // change la bordure en rouge en cas de défaite
-        document.querySelector('.game-container').style.border = '10px solid #f44336';; // Rouge pour la défaite
+        document.querySelector('body').style.background = '#f44336'; // Rouge pour la défaite
+        showAuthModal(timeSpent, correctAnswers, correct);
     }
-    
 
     saveBestScore(correctAnswers);
+}
 
+function showResultScreen(win, timeSpent, scoreValue, correct = "") {
+    resultEl.classList.remove("hidden");
     resultEl.innerHTML = win
         ? `<h2> Vous avez réussi toutes les énigmes !</h2>
            <p>Temps : ${timeSpent} s</p>
-           <p>Bonnes réponses : ${correctAnswers}</p>
-
-           <button onclick="startGame()">Rejouer</button>`
+           <p>Score : ${scoreValue}</p>
+           <button onclick="startGame()">Rejouer</button>
+           <button onclick="window.location.href='../menu.html'">Retour au menu</button>`
         : `<h2> Mauvaise réponse</h2>
            <p>La bonne réponse était : <strong>${correct}</strong></p>
            <p>Temps : ${timeSpent} s</p>
-           <p>Bonnes réponses : ${correctAnswers}</p>
-           <button onclick="startGame()">Rejouer</button>`;
+           <p>Score : ${scoreValue}</p>
+           <button onclick="startGame()">Rejouer</button>
+           <button onclick="window.location.href='../menu.html'">Retour au menu</button>`;
 }
-    
+
+function showAuthModal(timeSpent, scoreValue, correct = "") {
+    document.querySelector('.game-container').style.display = 'none';
+    document.getElementById('auth-modal').style.display = 'block';
+    document.getElementById('final-score').textContent = scoreValue;
+    document.getElementById('auth-form').style.display = 'block';
+    document.getElementById('rejouer-btn').style.display = 'none';
+    document.getElementById('retour-menu-modal').style.display = 'none';
+    document.getElementById('pseudo').value = '';
+    document.getElementById('lost-info').innerHTML = `
+        <p>La bonne réponse était : <strong>${correct}</strong></p>
+        <p>Temps : ${timeSpent} s</p>`;
+}
+
+document.getElementById('auth-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const pseudo = document.getElementById('pseudo').value.trim();
+    if (pseudo) {
+        document.getElementById('auth-form').style.display = 'none';
+        document.getElementById('rejouer-btn').style.display = 'block';
+        document.getElementById('retour-menu-modal').style.display = 'block';
+        document.getElementById('lost-info').style.display = 'block';
+    } else {
+        alert('Veuillez remplir votre pseudo.');
+    }
+});
 
 function saveBestScore(score) {
     const best = localStorage.getItem("bestScore") || 0;
