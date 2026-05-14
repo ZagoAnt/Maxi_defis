@@ -56,6 +56,7 @@ let nbDrapeau = 0;
 let td = [];
 let explosion = 0;
 let premierCoup = 1;
+let victoire;
 
 /* Création de l'énigme */
 function randomTab(taille){
@@ -133,14 +134,17 @@ function coup(c,taille,event){
                     compteurCorrect++;
                     c.classList.remove("hidden");
                     c.classList.add("correct");
-                    c.style.backgroundImage = `url('../image/${c.dataset.nbBombe}.png')`;
+                    let i = c.dataset.i;
+                    let j = c.dataset.j;
                     for (let di = -1; di <= 1; di++) {
                         for (let dj = -1; dj <= 1; dj++) {
                             if (di === 0 && dj === 0) continue;
                             let ni = i + di;
                             let nj = j + dj;
                             if (ni >= 0 && ni < taille && nj >= 0 && nj < taille * 2) {
-                                td[ni][nj].dataset.nbBombe--;
+                                if(td[ni][nj].dataset.value == "1"){
+                                    td[ni][nj].dataset.nbBombe--;
+                                }
                             }
                         }
                     }
@@ -261,6 +265,7 @@ function isWon(taille){
         ongoingGame = false;  // On arrête la partie
         stopTimer();          // On arrête le timer
         clearInterval(game);  // On arrête l'intervalle de vérification de la condition de victoire
+        victoire = 1;
     }
     if (explosion == 1 || minute == 0 && seconde == 0){ // Défaite
         document.body.classList.add("defeat-background");
@@ -270,6 +275,7 @@ function isWon(taille){
         clearInterval(game);
         reveal(taille); // On révèle la grille pour montrer au joueur son erreur
         setTimeout(()=>{boiteFin(message);},3300);
+        victoire = 0;
     }
 }
 
@@ -319,9 +325,10 @@ function boiteFin(message) {
     titre.style.color = "black";
     titre.textContent = message;
 
-    // Bouton de fermeture
+    // Bouton de retour au menu
     let retourMenu = document.createElement("button");
-    retourMenu.textContent = "OK";
+    retourMenu.textContent = "Retour au menu";
+    retourMenu.id = "BtMenu";
     retourMenu.style.marginTop = "10px";
     retourMenu.style.padding = "10px";
     retourMenu.style.border = "none";
@@ -329,48 +336,160 @@ function boiteFin(message) {
     retourMenu.style.color = "white";
     retourMenu.style.borderRadius = "5px";
     retourMenu.style.cursor = "pointer";
+    retourMenu.addEventListener("click",Menu);
 
-    // Création du formulaire
-    let form = document.createElement("form");
-    form.method = "POST";
-    form.action = window.location.href;
-    form.style.display = "flex";
-    form.style.flexDirection = "column";
-    form.style.alignItems = "center";
-    form.style.gap = "10px";
-    form.style.marginTop = "20px";
+    // Bouton pour rejouer
+    let rejouer = document.createElement("button");
+    rejouer.textContent = "Rejouer";
+    rejouer.id = "BtRejouer"
+    rejouer.style.marginTop = "10px";
+    rejouer.style.padding = "10px";
+    rejouer.style.border = "none";
+    rejouer.style.background = "#28a745";
+    rejouer.style.color = "white";
+    rejouer.style.borderRadius = "5px";
+    rejouer.style.cursor = "pointer";
+    rejouer.addEventListener("click",relancer);
 
     // Création de l'input texte
     let pseudo = document.createElement("input");
     pseudo.setAttribute("type", "text");
     pseudo.setAttribute("placeholder", "Entrez votre pseudo");
-    pseudo.name="pseudo";
+    pseudo.id = "pseudo";
     pseudo.style.padding = "8px";
     pseudo.style.border = "1px solid #ccc";
     pseudo.style.borderRadius = "5px";
     pseudo.style.width = "200px";
 
-    // Création du bouton submit
-    let submitButton = document.createElement("input");
-    submitButton.type = "submit"
-    submitButton.textContent = "Sauvegarder";
-    submitButton.style.padding = "8px 12px";
-    submitButton.style.border = "none";
-    submitButton.style.background = "#007BFF";
-    submitButton.style.color = "white";
-    submitButton.style.borderRadius = "5px";
-    submitButton.style.cursor = "pointer";
-
     // Assemblage des éléments
     fondb.appendChild(titre);
-    fondb.appendChild(form);
-    form.appendChild(pseudo);
-    form.appendChild(submitButton);
+    fondb.appendChild(pseudo);
+    fondb.appendChild(retourMenu);
+    fondb.appendChild(rejouer);
     fond.appendChild(fondb);
     document.body.appendChild(fond);
+
+    save = setInterval(canSave,100);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Sauvegarde -------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Création de l'objet pour la sauvegarde */
+let historique;
 
+function creerPartie(){
+    const now = new Date();
+    const date = now.toLocaleDateString("fr-FR");
+    const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
+    let pseudo = document.getElementById("pseudo").value;
+    let partie = {
+                    pseudo: pseudo,
+                    victoire: victoire,
+                    temps: `${minute.toString().padStart(2,'0')}:${seconde.toString().padStart(2,'0')}`,
+                    date: `${date} ${heure}`
+                };
+    historique.push(partie);
+}
+
+async function sauvegarde(){
+    // Variable
+    const proprio = "ZagoAnt";
+    const repo = "Maxi_defis";
+    const path = "Maxi_defis/Sauvegarde/Sauvegarde.json";
+    const GITHUB_TOKEN = "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";
+
+    // Url de l'API GitHub pour nos modifications
+    const apiURL = `https://api.github.com/repos/${proprio}/${repo}/contents/${path}`;
+
+    // On récupère notre fichier .json 
+    const reponse = await fetch(apiURL, {
+        headers: {
+            Authorization: `Bearer ${GITHUB_TOKEN}`,
+            Accept: "application/vnd.github+json"
+        }
+    });
+    const data = await reponse.json();
+
+    // On transforme notre résultat en objet manipulable
+    // atob() passe du format base64 à JavaScript
+    // parse() transforme la chaine de caractère en objet JS
+    const partie = JSON.parse(
+        atob(data.content)
+    );
+    historique = partie.jeux[1].partie; // On récupère l'historique de notre jeu
+    console.log(partie.connect);
+
+    // On ajoute dans notre historique notre partie
+    creerPartie();
+
+    // On reformate dans l'autre sens
+    // btoa() passe du format JavaScript à base64
+    // stringify() transforme un objet en chaine de caractère
+    const updatedContent = btoa(
+        JSON.stringify(partie, null, 2)
+    );
+
+    // On renvoit le fichier modifier sur GitHub
+    const updateResponse = await fetch(apiURL, {
+        method: "PUT",
+        headers: {
+            Authorization: `Bearer ${GITHUB_TOKEN}`,
+            Accept: "application/vnd.github+json",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            message: "Modification du JSON",
+            content: updatedContent,
+            sha: data.sha
+        })
+    });
+    const result = await updateResponse.json();
+}
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*Fin de Partie------------------------------------------------------------------------------------------------------------------------------------------------------*/
+function canSave(){
+    let BtMenu = document.getElementById("BtMenu");
+    let BtRejouer = document.getElementById("BtRejouer");
+    console.log(document.getElementById("pseudo").value.trim().length);
+    if(document.getElementById("pseudo").value.trim().length == 0){
+        BtMenu.disabled = true;
+        BtRejouer.disabled = true;
+        BtMenu.style.backgroundColor = "grey";
+        BtRejouer.style.backgroundColor = "grey";
+    }
+    else{
+        BtMenu.disabled = false;
+        BtRejouer.disabled = false;
+        BtMenu.style.background = "#28a745";
+        BtRejouer.style.background = "#28a745";
+    }
+}
+
+/* Rejouer */
+function relancer(){
+    clearInterval(save);
+    BtMenu.disabled = true;
+    BtRejouer.disabled = true;
+    BtMenu.style.backgroundColor = "grey";
+    BtRejouer.style.backgroundColor = "grey";
+    sauvegarde();
+    setTimeout(() => {window.location.href = "index.html";}, 2000);
+}
+
+/* Retour au menu */
+function Menu(){
+    clearInterval(save);
+    BtMenu.disabled = true;
+    BtRejouer.disabled = true;
+    BtMenu.style.backgroundColor = "grey";
+    BtRejouer.style.backgroundColor = "grey";
+    sauvegarde();
+    setTimeout(() => {window.location.href = "../../Menu/html/menu.html";}, 2000);
+}
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
