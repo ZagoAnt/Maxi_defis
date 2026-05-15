@@ -148,6 +148,7 @@ function coup(c,taille,event){
                             }
                         }
                     }
+                    safeZone(c,taille);
                 }
                 else{
                     /* Le joueur clique sur une bombe */
@@ -375,9 +376,7 @@ function boiteFin(message) {
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Sauvegarde -------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Création de l'objet pour la sauvegarde */
-let historique;
-
-function creerPartie(){
+function sauvegarde(){
     const now = new Date();
     const date = now.toLocaleDateString("fr-FR");
     const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
@@ -388,69 +387,22 @@ function creerPartie(){
                     temps: `${minute.toString().padStart(2,'0')}:${seconde.toString().padStart(2,'0')}`,
                     date: `${date} ${heure}`
                 };
-    historique.push(partie);
-}
-
-async function sauvegarde(){
-    // Variable
-    const proprio = "ZagoAnt";
-    const repo = "Maxi_defis";
-    const path = "Maxi_defis/Sauvegarde/Sauvegarde.json";
-    const GITHUB_TOKEN = "";
-
-    // Url de l'API GitHub pour nos modifications
-    const apiURL = `https://api.github.com/repos/${proprio}/${repo}/contents/${path}`;
-
-    // On récupère notre fichier .json 
-    const reponse = await fetch(apiURL, {
+    fetch("https://eliot.zagant27.workers.dev/save/demineur", {
+        method: "POST",
         headers: {
-            Authorization: `Bearer ${GITHUB_TOKEN}`,
-            Accept: "application/vnd.github+json"
-        }
-    });
-    const data = await reponse.json();
-
-    // On transforme notre résultat en objet manipulable
-    // atob() passe du format base64 à JavaScript
-    // parse() transforme la chaine de caractère en objet JS
-    const partie = JSON.parse(
-        atob(data.content)
-    );
-    historique = partie.jeux[1].partie; // On récupère l'historique de notre jeu
-    console.log(partie.connect);
-
-    // On ajoute dans notre historique notre partie
-    creerPartie();
-
-    // On reformate dans l'autre sens
-    // btoa() passe du format JavaScript à base64
-    // stringify() transforme un objet en chaine de caractère
-    const updatedContent = btoa(
-        JSON.stringify(partie, null, 2)
-    );
-
-    // On renvoit le fichier modifier sur GitHub
-    const updateResponse = await fetch(apiURL, {
-        method: "PUT",
-        headers: {
-            Authorization: `Bearer ${GITHUB_TOKEN}`,
-            Accept: "application/vnd.github+json",
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-            message: "Modification du JSON",
-            content: updatedContent,
-            sha: data.sha
+        body: JSON.stringify(partie)
         })
-    });
-    const result = await updateResponse.json();
+        .then(res => res.json())
+        .then(data => console.log(data));
 }
+
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /*Fin de Partie------------------------------------------------------------------------------------------------------------------------------------------------------*/
 function canSave(){
     let BtMenu = document.getElementById("BtMenu");
     let BtRejouer = document.getElementById("BtRejouer");
-    console.log(document.getElementById("pseudo").value.trim().length);
     if(document.getElementById("pseudo").value.trim().length == 0){
         BtMenu.disabled = true;
         BtRejouer.disabled = true;
