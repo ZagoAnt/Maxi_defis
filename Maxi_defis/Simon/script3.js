@@ -274,7 +274,7 @@ function flashCouleur(couleur) {
 // script3.js
 const urlParams = new URLSearchParams(window.location.search);
 const username2 = urlParams.get("username");
-
+let reactionTime;
 function checkSequence(game) {
     for (let i = 0; i < game.sequenceJouer.length; i++) {
         if (game.sequenceJouer[i] !== game.sequence[i]) {
@@ -283,7 +283,7 @@ function checkSequence(game) {
 
             // Calcul du temps de réaction
             const endTime = new Date().getTime();
-            const reactionTime = ((endTime - startTime) / 1000).toFixed(2); // Temps en secondes
+            reactionTime = ((endTime - startTime) / 1000).toFixed(2); // Temps en secondes
 
             document.querySelector('.jeu-container').style.display = 'none';
             document.querySelector('body').style.background = '#f44336';
@@ -366,6 +366,7 @@ function setupAuthModal() {
     });
 
     document.getElementById('rejouer-auth-btn').addEventListener('click', function () {
+        sauvegarde();
         const authModal = document.getElementById('auth-modal');
         authModal.style.display = 'none';
         document.querySelector('.jeu-container').style.display = 'flex';
@@ -380,11 +381,13 @@ function setupAuthModal() {
     });
 
     document.getElementById('retour-menu-auth-btn').addEventListener('click', function () {
-        window.location.href = '../menu.html';
+        sauvegarde();
+        setTimeout(() => {window.location.href = '../Menu/html/menu.html';},2000);
     });
 
     document.getElementById('retour-home-auth-btn').addEventListener('click', function () {
-        window.location.href = 'pagedebut.html';
+        sauvegarde();
+        setTimeout(() => {window.location.href = 'pagedebut.html';},2000);
     });
 }
 
@@ -399,22 +402,25 @@ function updateNiveau(level) {
     niveau.textContent = "Niveau: " + level;
 }
 
-function saveGame() {
-    console.log("Saving game data...");
-    if (!niveauActuel || !reactionTime || !difficulty) {
-        alert("Les données de jeu sont invalides. Veuillez réessayer.");
-        return;
-    }
-
-    if (username2) {
-        console.log("Username:", username2);
-        // Construction de l'URL avec les paramètres nécessaires
-        let newURL = `pagedebut.html?username2=${encodeURIComponent(username2)}&gamelevel=${encodeURIComponent(niveauActuel)}&reactionTime=${encodeURIComponent(reactionTime)}&difficulty=${encodeURIComponent(difficulty)}`;
-        console.log("URL à ouvrir :", newURL);
-
-        // Redirection vers la page pour sauvegarder les scores
-        window.location.href = newURL;
-    } else {
-        alert("Veuillez entrer un nom d'utilisateur valide.");
-    }
+function sauvegarde(){
+    const now = new Date();
+    const date = now.toLocaleDateString("fr-FR");
+    const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
+    let pseudo = document.getElementById("pseudo-auth").value;
+    let partie = {
+                    pseudo: pseudo,
+                    score: jeux.level,
+                    difficulte: difficulty,
+                    tempsReaction : reactionTime,
+                    date: `${date} ${heure}`
+                };
+    fetch("https://eliot.zagant27.workers.dev/save/simon", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(partie)
+        })
+        .then(res => res.json())
+        .then(data => console.log(data));
 }
