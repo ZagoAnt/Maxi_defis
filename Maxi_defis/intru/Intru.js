@@ -14,6 +14,8 @@ let totalScore = 0;
 let levelTimeLimit = 90; // 1 min 30 sec
 let timeRemaining = levelTimeLimit;
 let timerInterval = null;
+let victoire;
+let currentLevel;
 
 // liste d'équations
 const equations_lvl1 = [
@@ -300,6 +302,7 @@ function afficherEquations(equationsCorrectes, equationsFausses) {
           currentLevel++;
           if (currentLevel > levels.length) {
             // Jeu terminé - Afficher la modale
+            victoire = 1;
             document.getElementById("finalLevel").textContent = currentLevel - 1;
             document.getElementById("finalScore").textContent = totalScore;
             playerNameInput.value = "";
@@ -308,6 +311,7 @@ function afficherEquations(equationsCorrectes, equationsFausses) {
             carre.innerHTML = "";
             hideExplanations();
           } else {
+            victoire = 0;
             levelDiv.textContent = `Niveau ${currentLevel}`;
             afficherEquations(levels[currentLevel - 1].correct, levels[currentLevel - 1].false);
             hideExplanations();
@@ -372,13 +376,14 @@ function hideExplanations() {
   explanationRight.style.opacity = "0";
 }
 
-let currentLevel = startingLevel >= 1 && startingLevel <= levels.length ? startingLevel : 1;
+currentLevel = startingLevel >= 1 && startingLevel <= levels.length ? startingLevel : 1;
 levelDiv.textContent = `Niveau ${currentLevel}`;
 afficherEquations(levels[currentLevel - 1].correct, levels[currentLevel - 1].false);
 hideExplanations();
 
 // Gestionnaires d'événements pour la modale
 replayBtn.addEventListener('click', () => {
+  sauvegarde();
   // Réinitialiser le jeu
   totalScore = 0;
   currentLevel = 1;
@@ -390,9 +395,32 @@ replayBtn.addEventListener('click', () => {
 });
 
 menuBtn.addEventListener('click', () => {
-  // Bouton retour au menu (sans fonction pour le moment)
-  console.log("Retour au menu");
+  sauvegarde();
+  setTimeout(() => {window.location.href = "../Menu/html/menu.html";}, 2000);
 });
 
 playerNameInput.addEventListener('input', updateModalButtonsState);
 updateModalButtonsState();
+
+function sauvegarde(){
+    const now = new Date();
+    const date = now.toLocaleDateString("fr-FR");
+    const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
+    let pseudo = document.getElementById("playerName").value;
+    let partie = {
+                    pseudo: pseudo,
+                    victoire: victoire,
+                    score: totalScore,
+                    level:currentLevel,
+                    date: `${date} ${heure}`
+                };
+    fetch("https://eliot.zagant27.workers.dev/save/intru", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(partie)
+        })
+        .then(res => res.json())
+        .then(data => console.log(data));
+}

@@ -58,6 +58,8 @@ let compteurCorrect = 0;
 let compteurCible = 0;
 let ongoingGame = false;
 let td;
+let victoire;
+let difficulte;
 
 /* Fonction */
 
@@ -232,7 +234,6 @@ function reveal(td,taille){
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 /* Partie -----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-
 function coup(c,taille){
     if(ongoingGame == true){
         let valeur = c.dataset.value;
@@ -257,6 +258,7 @@ function coup(c,taille){
 function isWon(td,taille){
     let message = "";
     if (compteurCorrect == compteurCible && seconde != 0){ // Victoire
+        victoire = 1;
         document.body.classList.add("win-background");
         message = "Victoire";
         boiteFin(message);
@@ -265,6 +267,7 @@ function isWon(td,taille){
         clearInterval(game);  // On arrête l'intervalle de vérification de la condition de victoire
     }
     if (compteurErreur == 0 || minute == 0 && seconde == 0){ // Défaite
+        victoire = 0;
         document.body.classList.add("defeat-background");
         message = "Défaite";
         ongoingGame = false;
@@ -285,6 +288,7 @@ document.getElementById("difficile").addEventListener("click",function() {gameSt
 
 /* Début de partie */
 function gameStart(taille){
+    difficulte = (taille/2) -2;
     randomTab(taille);
     creer(taille);
     minute += (taille/2) -3;
@@ -326,9 +330,10 @@ function boiteFin(message) {
     titre.style.color = "black";
     titre.textContent = message;
 
-    // Bouton de fermeture
+    // Bouton de retour au menu
     let retourMenu = document.createElement("button");
-    retourMenu.textContent = "OK";
+    retourMenu.textContent = "Retour au menu";
+    retourMenu.id = "BtMenu";
     retourMenu.style.marginTop = "10px";
     retourMenu.style.padding = "10px";
     retourMenu.style.border = "none";
@@ -336,48 +341,107 @@ function boiteFin(message) {
     retourMenu.style.color = "white";
     retourMenu.style.borderRadius = "5px";
     retourMenu.style.cursor = "pointer";
+    retourMenu.addEventListener("click",Menu);
 
-    // Création du formulaire
-    let form = document.createElement("form");
-    form.method = "POST";
-    form.action = window.location.href;
-    form.style.display = "flex";
-    form.style.flexDirection = "column";
-    form.style.alignItems = "center";
-    form.style.gap = "10px";
-    form.style.marginTop = "20px";
+    // Bouton pour rejouer
+    let rejouer = document.createElement("button");
+    rejouer.textContent = "Rejouer";
+    rejouer.id = "BtRejouer"
+    rejouer.style.marginTop = "10px";
+    rejouer.style.padding = "10px";
+    rejouer.style.border = "none";
+    rejouer.style.background = "#28a745";
+    rejouer.style.color = "white";
+    rejouer.style.borderRadius = "5px";
+    rejouer.style.cursor = "pointer";
+    rejouer.addEventListener("click",relancer);
 
     // Création de l'input texte
     let pseudo = document.createElement("input");
     pseudo.setAttribute("type", "text");
     pseudo.setAttribute("placeholder", "Entrez votre pseudo");
-    pseudo.name="pseudo";
+    pseudo.id = "pseudo";
     pseudo.style.padding = "8px";
     pseudo.style.border = "1px solid #ccc";
     pseudo.style.borderRadius = "5px";
     pseudo.style.width = "200px";
 
-    // Création du bouton submit
-    let submitButton = document.createElement("input");
-    submitButton.type = "submit"
-    submitButton.textContent = "Sauvegarder";
-    submitButton.style.padding = "8px 12px";
-    submitButton.style.border = "none";
-    submitButton.style.background = "#007BFF";
-    submitButton.style.color = "white";
-    submitButton.style.borderRadius = "5px";
-    submitButton.style.cursor = "pointer";
-
     // Assemblage des éléments
     fondb.appendChild(titre);
-    fondb.appendChild(form);
-    form.appendChild(pseudo);
-    form.appendChild(submitButton);
+    fondb.appendChild(pseudo);
+    fondb.appendChild(retourMenu);
+    fondb.appendChild(rejouer);
     fond.appendChild(fondb);
     document.body.appendChild(fond);
+
+    save = setInterval(canSave,100);
 }
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 /* Sauvegarde -------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/* Création de l'objet pour la sauvegarde */
+function sauvegarde(){
+    const now = new Date();
+    const date = now.toLocaleDateString("fr-FR");
+    const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
+    let pseudo = document.getElementById("pseudo").value;
+    let partie = {
+                    pseudo: pseudo,
+                    victoire: victoire,
+                    temps: `${minute.toString().padStart(2,'0')}:${seconde.toString().padStart(2,'0')}`,
+                    date: `${date} ${heure}`,
+                    difficulte: difficulte,
+                    erreur: `${5-compteurErreur}`
+                };
+    fetch("https://eliot.zagant27.workers.dev/save/nonogram", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(partie)
+        })
+        .then(res => res.json())
+        .then(data => console.log(data));
+}
 
+/*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+/*Fin de Partie------------------------------------------------------------------------------------------------------------------------------------------------------*/
+function canSave(){
+    let BtMenu = document.getElementById("BtMenu");
+    let BtRejouer = document.getElementById("BtRejouer");
+    if(document.getElementById("pseudo").value.trim().length == 0){
+        BtMenu.disabled = true;
+        BtRejouer.disabled = true;
+        BtMenu.style.backgroundColor = "grey";
+        BtRejouer.style.backgroundColor = "grey";
+    }
+    else{
+        BtMenu.disabled = false;
+        BtRejouer.disabled = false;
+        BtMenu.style.background = "#28a745";
+        BtRejouer.style.background = "#28a745";
+    }
+}
+
+/* Rejouer */
+function relancer(){
+    clearInterval(save);
+    BtMenu.disabled = true;
+    BtRejouer.disabled = true;
+    BtMenu.style.backgroundColor = "grey";
+    BtRejouer.style.backgroundColor = "grey";
+    sauvegarde();
+    setTimeout(() => {window.location.href = "index.html";}, 2000);
+}
+
+/* Retour au menu */
+function Menu(){
+    clearInterval(save);
+    BtMenu.disabled = true;
+    BtRejouer.disabled = true;
+    BtMenu.style.backgroundColor = "grey";
+    BtRejouer.style.backgroundColor = "grey";
+    sauvegarde();
+    setTimeout(() => {window.location.href = "../../Menu/html/menu.html";}, 2000);
+}
 /*-------------------------------------------------------------------------------------------------------------------------------------------------------------------*/

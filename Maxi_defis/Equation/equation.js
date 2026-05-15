@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let timerInterval = null;
     let seconds = 0;
     let shuffledEquations = [];
+    let victoire;
+    let timeString;
 
     // Sélection des éléments du DOM
     const number1 = document.getElementById('number1');
@@ -140,6 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (result === equation.target) {
             currentIndex += 1;
             if (currentIndex >= shuffledEquations.length) {
+                victoire = 1;
                 stopTimer();
                 document.querySelector('.game-container').style.border = '10px solid #4CAF50';
                 const mins = Math.floor(seconds / 60);
@@ -159,12 +162,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 300);
             }
         } else {
+            victoire = 0;
             stopTimer();
             document.querySelector('body').style.background = '#f44336';
             const correctAnswer = getCorrectAnswer();
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
-            const timeString = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            timeString = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
             showAuthModal(currentIndex, timeString, correctAnswer);
             opSelect1.disabled = true;
             opSelect2.disabled = true;
@@ -214,4 +218,41 @@ document.addEventListener('DOMContentLoaded', function () {
     shuffledEquations = shuffleArray(equations);
     startTimer();
     renderEquation();
+
+    function sauvegarde(){
+        const now = new Date();
+        const date = now.toLocaleDateString("fr-FR");
+        const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
+        let pseudo = document.getElementById("pseudo").value;
+        let partie = {
+                        pseudo: pseudo,
+                        victoire: victoire,
+                        score: currentIndex,
+                        temps:timeString,
+                        date: `${date} ${heure}`
+                    };
+        fetch("https://eliot.zagant27.workers.dev/save/equation", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(partie)
+            })
+            .then(res => res.json())
+            .then(data => console.log(data));
+    }
+
+    // Bouton Rejouer
+    function rejouer(){
+        sauvegarde();
+        setTimeout(startGame(), 2000);
+    }
+    document.getElementById('rejouer-btn').addEventListener('click', rejouer);
+
+    // Bouton Retour au menu
+    function retourAuMenu(){
+        sauvegarde();
+        setTimeout(() => {window.location.href = "../Menu/html/menu.html";}, 2000);
+    }
+    document.getElementById('retour-menu-modal').addEventListener('click', retourAuMenu);
 });

@@ -181,7 +181,6 @@ function initGame() {
     gameContainer.classList.remove('lost');
     gameContainer.style.border = '10px solid rgb(28, 93, 103)';
     gameContainer.style.display = 'block';
-    document.getElementById('replayBtn').style.display = 'none';
     document.getElementById('message').textContent = '';
     document.getElementById('timer-container').style.display = 'block';
     document.getElementById('auth-modal').style.display = 'none';
@@ -203,7 +202,39 @@ document.getElementById('auth-form').addEventListener('submit', function(event) 
 });
 
 // Bouton Rejouer
-document.getElementById('replayBtn').addEventListener('click', initGame);
+function rejouer(){
+    sauvegarde();
+    setTimeout(initGame(), 2000);
+}
+document.getElementById('rejouer-btn').addEventListener('click', rejouer);
+
+// Bouton Retour au menu
+function retourAuMenu(){
+    sauvegarde();
+    setTimeout(() => {window.location.href = "../Menu/html/menu.html";}, 2000);
+}
+document.getElementById('retour-menu-modal').addEventListener('click', retourAuMenu);
+
+function sauvegarde(){
+    const now = new Date();
+    const date = now.toLocaleDateString("fr-FR");
+    const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
+    let pseudo = document.getElementById("pseudo").value;
+    let partie = {
+                    pseudo: pseudo,
+                    score: score,
+                    date: `${date} ${heure}`
+                };
+    fetch("https://eliot.zagant27.workers.dev/save/couleur", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(partie)
+        })
+        .then(res => res.json())
+        .then(data => console.log(data));
+}
 
 // Lancer le jeu au chargement
 initGame();

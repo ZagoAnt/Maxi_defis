@@ -15,6 +15,7 @@ let currentIndex = 0;
 let correctAnswers = 0;
 let startTime;
 let timerInterval;
+let victoire;
 
 const questionEl = document.getElementById("question");
 const answerEl = document.getElementById("answer");
@@ -93,9 +94,11 @@ function endGame(win, correct = "") {
     resultEl.classList.add("hidden");
 
     if (win) {
+        victoire = 1;
         document.body.classList.add("win-background"); // Changer le fond en vert
         showResultScreen(true, timeSpent, correctAnswers);
     } else {
+        victoire = 0;
         document.querySelector('body').style.background = '#f44336'; // Rouge pour la défaite
         showAuthModal(timeSpent, correctAnswers, correct);
     }
@@ -151,5 +154,41 @@ function saveBestScore(score) {
         localStorage.setItem("bestScore", score);
     }
 }
+
+function sauvegarde(){
+    const now = new Date();
+    const date = now.toLocaleDateString("fr-FR");
+    const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
+    let pseudo = document.getElementById("pseudo").value;
+    let partie = {
+                    pseudo: pseudo,
+                    victoire: victoire,
+                    score: correctAnswers,
+                    date: `${date} ${heure}`
+                };
+    fetch("https://eliot.zagant27.workers.dev/save/enigme", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(partie)
+        })
+        .then(res => res.json())
+        .then(data => console.log(data));
+}
+
+// Bouton Rejouer
+function rejouer(){
+    sauvegarde();
+    setTimeout(startGame(), 2000);
+}
+document.getElementById('rejouer-btn').addEventListener('click', rejouer);
+
+// Bouton Retour au menu
+function retourAuMenu(){
+    sauvegarde();
+    setTimeout(() => {window.location.href = "../Menu/html/menu.html";}, 2000);
+}
+document.getElementById('retour-menu-modal').addEventListener('click', retourAuMenu);
 
 startGame();

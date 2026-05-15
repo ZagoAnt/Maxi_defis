@@ -151,3 +151,38 @@ document.getElementById('auth-form').addEventListener('submit', function(event) 
 });
 
 window.onload = startGame;
+
+// Bouton Rejouer
+function rejouer(){
+    sauvegarde();
+    setTimeout(() => {window.location.href = "vrai_ou_faux.html";}, 2000);
+}
+document.getElementById('rejouer-btn').addEventListener('click', rejouer);
+
+// Bouton Retour au menu
+function retourAuMenu(){
+    sauvegarde();
+    setTimeout(() => {window.location.href = "../Menu/html/menu.html";}, 2000);
+}
+document.getElementById('retour-menu-modal').addEventListener('click', retourAuMenu);
+
+function sauvegarde(){
+    const now = new Date();
+    const date = now.toLocaleDateString("fr-FR");
+    const heure = now.toLocaleTimeString("fr-FR", {hour: "2-digit",minute: "2-digit"});
+    let pseudo = document.getElementById("pseudo").value;
+    let partie = {
+                    pseudo: pseudo,
+                    score: score,
+                    date: `${date} ${heure}`
+                };
+    fetch("https://eliot.zagant27.workers.dev/save/vraifaux", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(partie)
+        })
+        .then(res => res.json())
+        .then(data => console.log(data));
+}
