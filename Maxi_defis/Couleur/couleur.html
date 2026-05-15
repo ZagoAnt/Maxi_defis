@@ -25,9 +25,25 @@
             <button class="btn-replay" id="replayBtn" style="display: none;">Rejouer</button>
         </div>
     </div>
-    <button id="retour-menu" type="button" onclick="window.location.href='../menu.html'">
-            Retour au menu
-    </button>
+    <!-- Modale d'authentification -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <h2>Authentification requise</h2>
+            <p>Votre score : <span id="final-score"></span></p>
+            <form id="auth-form">
+                <label for="pseudo">Pseudo :</label>
+                <input type="text" id="pseudo" required>
+                <br>
+                <button type="submit">Valider</button>
+            </form>
+            <button id="rejouer-btn" type="button" onclick="initGame()" style="display:none; margin-top: 20px;">
+                Rejouer
+            </button>
+            <button id="retour-menu-modal" type="button" onclick="window.location.href='../menu.html'" style="display:none; margin-top: 20px;">
+                Retour au menu
+            </button>
+        </div>
+    </div>
 
     <script src="couleur.js"></script>
 </body>

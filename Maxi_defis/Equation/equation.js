@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
         number2.textContent = equation.numbers[1];
         number3.textContent = equation.numbers[2];
         targetValue.textContent = equation.target;
-        document.body.style.backgroundColor = '#6ae4be';
+        document.body.style.backgroundImage = "url('images/backEquation.png')";
         document.querySelector('.game-container').style.border = '10px solid rgb(28, 93, 103)';
         message.textContent = '';
         message.style.color = '#333';
@@ -160,27 +160,55 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         } else {
             stopTimer();
-            document.querySelector('.game-container').style.border = '10px solid #f44336';
+            document.querySelector('body').style.background = '#f44336';
             const correctAnswer = getCorrectAnswer();
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
             const timeString = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            message.textContent = `Faux ! Bonne réponse : ${correctAnswer} | Temps : ${timeString}`;
-            message.style.color = 'black';
-            btnVerify.style.display = 'none';
-            btnReplay.style.display = 'block';
+            showAuthModal(currentIndex, timeString, correctAnswer);
             opSelect1.disabled = true;
             opSelect2.disabled = true;
         }
     });
 
-    // Événement du bouton rejouer
-    btnReplay.addEventListener('click', function () {
+    function showAuthModal(score, timeString, correctAnswer) {
+        document.querySelector('.game-container').style.display = 'none';
+        document.getElementById('auth-modal').style.display = 'block';
+        document.getElementById('final-score').textContent = score;
+        document.getElementById('auth-form').style.display = 'block';
+        document.getElementById('rejouer-btn').style.display = 'none';
+        document.getElementById('retour-menu-modal').style.display = 'none';
+        document.getElementById('lost-info').style.display = 'none';
+        document.getElementById('pseudo').value = '';
+        document.getElementById('lost-info').innerHTML = `<p><strong>Dommage !</strong></p>
+            <p>Bonne réponse : ${correctAnswer}</p>
+            <p>Temps : ${timeString}</p>`;
+    }
+
+    // Gestion de l'authentification
+    document.getElementById('auth-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const pseudo = document.getElementById('pseudo').value.trim();
+        if (pseudo) {
+            document.getElementById('auth-form').style.display = 'none';
+            document.getElementById('lost-info').style.display = 'block';
+            document.getElementById('rejouer-btn').style.display = 'block';
+            document.getElementById('retour-menu-modal').style.display = 'block';
+        } else {
+            alert('Veuillez remplir votre pseudo.');
+        }
+    });
+
+    // Fonction pour réinitialiser le jeu
+    window.startGame = function() {
         currentIndex = 0;
         shuffledEquations = shuffleArray(equations);
+        document.querySelector('.game-container').style.display = 'block';
+        document.getElementById('auth-modal').style.display = 'none';
+        document.getElementById('lost-info').style.display = 'none';
         startTimer();
         renderEquation();
-    });
+    };
 
     // Initialisation
     shuffledEquations = shuffleArray(equations);
