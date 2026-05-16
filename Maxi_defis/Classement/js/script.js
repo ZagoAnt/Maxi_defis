@@ -30,7 +30,7 @@ async function main(){
                 });
             }
         }
-        historiqueT.sort((a, b) => new Date(a.date) - new Date(b.date));
+        historiqueT.sort((a, b) => compareDate(b.date) - compareDate(a.date));
     }
     function triClassement() {
     for (const jeu of json.jeux) {
@@ -54,7 +54,7 @@ async function main(){
             case "demineur":
                 classementT[jeu.nom].sort(
                     (a, b) =>
-                        compareTemps(a.temps) - compareTemps(b.temps)
+                        compareTemps(b.temps) - compareTemps(a.temps)
                 );
                 break;
             case "nonogram":
@@ -62,7 +62,7 @@ async function main(){
                     if (b.difficulte !== a.difficulte) {
                         return b.difficulte - a.difficulte;
                     }
-                    return compareTemps(a.temps) - compareTemps(b.temps);
+                    return compareTemps(b.temps) - compareTemps(a.temps);
                 });
                 break;
             case "simon":
@@ -115,10 +115,10 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                     cas2.innerText = partie.pseudo
                     let cas3 = document.createElement("td");
                     cas3.innerText = partie.date;
-                    if(partie.victoire === "1"){
+                    if(partie.victoire == "1"){
                         ligne.style.backgroundColor = "#4CAF50";
                     }
-                    else if (partie.victoire === "0"){
+                    else if (partie.victoire == "0"){
                         ligne.style.backgroundColor = "#f44336";
                     }
                     else{
@@ -132,7 +132,7 @@ function creerHistorique(jeu,pseudo,victoire,tab){
             }
             else{
                 for (const partie of tab){
-                    if(partie.victoire === victoire){
+                    if(partie.victoire == victoire){
                         let ligne = document.createElement("tr");
                         let cas1 = document.createElement("td");
                         cas1.innerText = nomJeu(partie.jeu);
@@ -140,7 +140,7 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                         cas2.innerText = partie.pseudo
                         let cas3 = document.createElement("td");
                         cas3.innerText = partie.date;
-                        if(partie.victoire === "1"){
+                        if(partie.victoire == "1"){
                             ligne.style.backgroundColor = "#4CAF50";
                         }
                         else{
@@ -155,9 +155,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
             }
         }
         else{
-            if(victoire === "2"){
+            if(victoire == "2"){
                 for (const partie of tab){
-                    if(partie.pseudo === pseudo){
+                    if(partie.pseudo == pseudo){
                         let ligne = document.createElement("tr");
                         let cas1 = document.createElement("td");
                         cas1.innerText = nomJeu(partie.jeu);
@@ -165,10 +165,10 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                         cas2.innerText = partie.pseudo
                         let cas3 = document.createElement("td");
                         cas3.innerText = partie.date;
-                        if(partie.victoire === "1"){
+                        if(partie.victoire == "1"){
                             ligne.style.backgroundColor = "#4CAF50";
                         }
-                        else if (partie.victoire === "0"){
+                        else if (partie.victoire == "0"){
                             ligne.style.backgroundColor = "#f44336";
                         }
                         else{
@@ -183,7 +183,7 @@ function creerHistorique(jeu,pseudo,victoire,tab){
             }
             else{
                 for (const partie of tab){
-                    if(partie.victoire === victoire && partie.pseudo === pseudo){
+                    if(partie.victoire == victoire && partie.pseudo === pseudo){
                         let ligne = document.createElement("tr");
                         let cas1 = document.createElement("td");
                         cas1.innerText = nomJeu(partie.jeu);
@@ -191,7 +191,7 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                         cas2.innerText = partie.pseudo
                         let cas3 = document.createElement("td");
                         cas3.innerText = partie.date;
-                        if(partie.victoire === "1"){
+                        if(partie.victoire == "1"){
                             ligne.style.backgroundColor = "#4CAF50";
                         }
                         else{
@@ -279,11 +279,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
             tr.appendChild(th4);
             table.appendChild(tr);
             if(pseudo.length == 0){
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "demineur"){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -305,9 +305,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "demineur" && partie.victoire === victoire){
+                        if(partie.jeu === "demineur" && partie.victoire == victoire){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -329,11 +329,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
             }
             else{
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "demineur" && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -355,9 +355,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "demineur" && partie.victoire === victoire && partie.pseudo === pseudo){
+                        if(partie.jeu === "demineur" && partie.victoire == victoire && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -395,11 +395,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
             tr.appendChild(th4);
             table.appendChild(tr);
             if(pseudo.length == 0){
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "enigme"){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -422,9 +422,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "enigme" && partie.victoire === victoire){
+                        if(partie.jeu === "enigme" && partie.victoire == victoire){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -447,11 +447,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
             }
             else{
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "enigme" && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -474,9 +474,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "enigme" && partie.victoire === victoire && partie.pseudo === pseudo){
+                        if(partie.jeu === "enigme" && partie.victoire == victoire && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -515,11 +515,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
             tr.appendChild(th4);
             table.appendChild(tr);
             if(pseudo.length == 0){
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "equation"){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -542,9 +542,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "equation" && partie.victoire === victoire){
+                        if(partie.jeu === "equation" && partie.victoire == victoire){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -567,11 +567,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
             }
             else{
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "equation" && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -594,9 +594,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "equation" && partie.victoire === victoire && partie.pseudo === pseudo){
+                        if(partie.jeu === "equation" && partie.victoire == victoire && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -641,11 +641,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
             tr.appendChild(th6);
             table.appendChild(tr);
             if(pseudo.length == 0){
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "nonogram"){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -674,9 +674,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "nonogram" && partie.victoire === victoire){
+                        if(partie.jeu === "nonogram" && partie.victoire == victoire){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -705,11 +705,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
             }
             else{
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "nonogram" && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -738,9 +738,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "nonogram" && partie.victoire === victoire && partie.pseudo === pseudo){
+                        if(partie.jeu === "nonogram" && partie.victoire == victoire && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -918,11 +918,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
             tr.appendChild(th5);
             table.appendChild(tr);
             if(pseudo.length == 0){
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "intru"){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -948,9 +948,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "intru" && partie.victoire === victoire){
+                        if(partie.jeu === "intru" && partie.victoire == victoire){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -976,11 +976,11 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
             }
             else{
-                if(victoire === "2"){
+                if(victoire == "2"){
                     for (const partie of tab){
                         if(partie.jeu === "intru" && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -1006,9 +1006,9 @@ function creerHistorique(jeu,pseudo,victoire,tab){
                 }
                 else{
                     for (const partie of tab){
-                        if(partie.jeu === "intru" && partie.victoire === victoire && partie.pseudo === pseudo){
+                        if(partie.jeu === "intru" && partie.victoire == victoire && partie.pseudo === pseudo){
                             let ligne = document.createElement("tr");
-                            if(partie.victoire === "1"){
+                            if(partie.victoire == "1"){
                                 ligne.style.backgroundColor = "#4CAF50";
                             }
                             else{
@@ -1113,7 +1113,7 @@ function creerClassement(jeu,pseudo,tab){
             table.appendChild(tr);
             if(pseudo.length == 0){
                 for (const partie of tab["demineur"]){
-                    if(partie.jeu === "demineur" && partie.victoire === "1"){
+                    if(partie.jeu === "demineur" && partie.victoire == "1"){
                         let ligne = document.createElement("tr");
                         ligne.style.backgroundColor = "#4CAF50";
                         let cas1 = document.createElement("td");
@@ -1132,7 +1132,7 @@ function creerClassement(jeu,pseudo,tab){
             }
             else{
                 for (const partie of tab["demineur"]){
-                    if(partie.jeu === "demineur" && partie.victoire === "1" && partie.pseudo === pseudo){
+                    if(partie.jeu === "demineur" && partie.victoire == "1" && partie.pseudo === pseudo){
                         let ligne = document.createElement("tr");
                         ligne.style.backgroundColor = "#4CAF50";
                         let cas1 = document.createElement("td");
@@ -1167,7 +1167,7 @@ function creerClassement(jeu,pseudo,tab){
             table.appendChild(tr);
             if(pseudo.length == 0){
                for (const partie of tab["enigme"]){
-                    if(partie.jeu === "enigme" && partie.victoire === "1"){
+                    if(partie.jeu === "enigme" && partie.victoire == "1"){
                         let ligne = document.createElement("tr");
                         ligne.style.backgroundColor = "#4CAF50";
                         let cas1 = document.createElement("td");
@@ -1187,7 +1187,7 @@ function creerClassement(jeu,pseudo,tab){
             }
             else{
                 for (const partie of tab["enigme"]){
-                    if(partie.jeu === "enigme" && partie.victoire === "1" && partie.pseudo === pseudo){
+                    if(partie.jeu === "enigme" && partie.victoire == "1" && partie.pseudo === pseudo){
                         let ligne = document.createElement("tr");
                         ligne.style.backgroundColor = "#4CAF50";                            
                         let cas1 = document.createElement("td");
@@ -1223,7 +1223,7 @@ function creerClassement(jeu,pseudo,tab){
             table.appendChild(tr);
             if(pseudo.length == 0){
                 for (const partie of tab["equation"]){
-                    if(partie.jeu === "equation" && partie.victoire === "1"){
+                    if(partie.jeu === "equation" && partie.victoire == "1"){
                         let ligne = document.createElement("tr");
                         ligne.style.backgroundColor = "#4CAF50";
                         let cas1 = document.createElement("td");
@@ -1243,9 +1243,9 @@ function creerClassement(jeu,pseudo,tab){
             }
             else{
                 for (const partie of tab["equation"]){
-                    if(partie.jeu === "equation" && partie.victoire === "1" && partie.pseudo === pseudo){
+                    if(partie.jeu === "equation" && partie.victoire == "1" && partie.pseudo === pseudo){
                         let ligne = document.createElement("tr");
-                        if(partie.victoire === "1"){
+                        if(partie.victoire == "1"){
                             ligne.style.backgroundColor = "#4CAF50";
                         }
                         else{
@@ -1290,7 +1290,7 @@ function creerClassement(jeu,pseudo,tab){
             table.appendChild(tr);
             if(pseudo.length == 0){
                 for (const partie of tab["nonogram"]){
-                    if(partie.jeu === "nonogram" && partie.victoire === "1"){
+                    if(partie.jeu === "nonogram" && partie.victoire == "1"){
                         let ligne = document.createElement("tr");
                         ligne.style.backgroundColor = "#4CAF50";
                         let cas1 = document.createElement("td");
@@ -1316,7 +1316,7 @@ function creerClassement(jeu,pseudo,tab){
             }
             else{
                 for (const partie of tab["nonogram"]){
-                    if(partie.jeu === "nonogram" && partie.victoire === "1" && partie.pseudo === pseudo){
+                    if(partie.jeu === "nonogram" && partie.victoire == "1" && partie.pseudo === pseudo){
                         let ligne = document.createElement("tr");
                          ligne.style.backgroundColor = "#4CAF50";
                         let cas1 = document.createElement("td");
@@ -1491,7 +1491,7 @@ function creerClassement(jeu,pseudo,tab){
             table.appendChild(tr);
             if(pseudo.length == 0){
                 for (const partie of tab["intru"]){
-                    if(partie.jeu === "intru" && partie.victoire === victoire){
+                    if(partie.jeu === "intru" && partie.victoire == victoire){
                         let ligne = document.createElement("tr");
                         ligne.style.backgroundColor = "#4CAF50";
                         let cas1 = document.createElement("td");
@@ -1514,7 +1514,7 @@ function creerClassement(jeu,pseudo,tab){
             }
             else{
                 for (const partie of tab["intru"]){
-                    if(partie.jeu === "intru" && partie.victoire === victoire && partie.pseudo === pseudo){
+                    if(partie.jeu === "intru" && partie.victoire == victoire && partie.pseudo === pseudo){
                         let ligne = document.createElement("tr");
                         ligne.style.backgroundColor = "#4CAF50";
                         let cas1 = document.createElement("td");
@@ -1570,6 +1570,15 @@ function nomJeu(nom){
     }
 }
 
+function compareDate(string) {
+    const [date, temps] = string.split(" ");
+    const [jour, mois, annee] = date.split("/");
+    const [minute, seconde] = temps.split(":");
+
+    return new Date(annee, mois - 1, jour, minute, seconde);
+}
+
 main();
 document.getElementById("valider").addEventListener("click",main);
 document.getElementById("retourMenu").addEventListener("click",()=>{window.location.href = "../../Menu/html/menu.html"});
+document.getElementById("form").addEventListener("submit", function (e) {e.preventDefault();});

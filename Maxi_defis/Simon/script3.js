@@ -5,6 +5,7 @@ const color = ["vert", "rouge", "jaune", "bleu"];
 let gameOver = false;
 let startTime;
 let difficulty; // 1: facile, 2: moyen, 3: difficile
+let score;
 
 // Sélection des éléments HTML
 const startButton = document.getElementById("comm");
@@ -280,7 +281,7 @@ function checkSequence(game) {
         if (game.sequenceJouer[i] !== game.sequence[i]) {
             gameOver = true;
             const niveauActuel = game.level;
-
+            score = niveauActuel;
             // Calcul du temps de réaction
             const endTime = new Date().getTime();
             reactionTime = ((endTime - startTime) / 1000).toFixed(2); // Temps en secondes
@@ -409,7 +410,7 @@ function sauvegarde(){
     let pseudo = document.getElementById("pseudo-auth").value;
     let partie = {
                     pseudo: pseudo,
-                    score: jeux.level,
+                    score: score,
                     difficulte: difficulty,
                     tempsReaction : reactionTime,
                     date: `${date} ${heure}`
