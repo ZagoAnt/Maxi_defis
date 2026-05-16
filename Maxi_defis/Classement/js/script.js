@@ -1,19 +1,13 @@
 // Récupération du JSON
 async function loadJson() {
-  const response = await fetch("https://raw.githubusercontent.com/ZagoAnt/Maxi_defis/main/Maxi_defis/Sauvegarde/Sauvegarde.json");
-
-  if (!response.ok) {
-    throw new Error("Erreur lors du chargement du JSON");
-  }
-
+  const response = await fetch("https://api.github.com/repos/ZagoAnt/Maxi_defis/contents/Maxi_defis/Sauvegarde/Sauvegarde.json?ts="+ Date.now());
   const data = await response.json();
-  return data;
+  const dataDecode = JSON.parse(atob(data.content.replace(/\n/g, "")));
+  return dataDecode;
 }
 
 async function main(){
     // Variable
-    var historiqueT = [];
-    var classementT = [];
     let jeu = document.getElementById("jeu").value;
     let pseudo = document.getElementById("pseudo").value;
     let victoire = document.getElementById("victoire").value;
@@ -81,10 +75,12 @@ async function main(){
 
     // Affichage
     if(type === "historique"){
+        var historiqueT = [];
         triHistorique();
         creerHistorique(jeu,pseudo,victoire,historiqueT);
     }
     else{
+        var classementT = [];
         triClassement();
         creerClassement(jeu,pseudo,classementT);
     }
