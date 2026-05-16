@@ -1,0 +1,63 @@
+.boite {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    background: rgb(28, 93, 103);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    min-width: 280px;
+}
+
+#form label {
+    font-weight: bold;
+    color : white;
+}
+
+#form select,
+#form input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #02c788;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #357ab8;
+}
+
+#result {
+    width: 100%;
+    border-collapse: collapse;
+    border: solid 10px rgb(28, 93, 103);
+}
+
+td{
+    text-align: center;
+    color: white;
+}
+
+body{
+    background: #6ae4be;
+}
+
+th{
+    color: white;
+    background-color: rgb(28, 93, 103);
+}

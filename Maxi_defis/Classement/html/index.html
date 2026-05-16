@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MD-Classement</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class = "boite">
+        <form action="#" id ="form">
+            <label for="type">Type : </label>
+            <select id="type">
+                <option value="historique">Historique</option>
+                <option value="classement">Classement</option>
+            </select>
+            <label for="jeu">Jeu : </label>
+            <select id="jeu">
+                <option value="tous">Tous les jeux</option>
+                <option value="couleur">Couleur</option>
+                <option value="demineur">Démineur</option>
+                <option value="enigme">Enigme</option>
+                <option value="equation">Equation</option>
+                <option value="nonogram">Nonogram</option>
+                <option value="simon">Simon</option>
+                <option value="vraifaux">Vrai ou Faux</option>
+                <option value="intru">Intru</option>
+            </select>
+            <label for="victoire">Afficher : </label>
+            <select id="victoire">
+                <option value="2">Victoire et Défaite</option>
+                <option value="1">Seulement les Victoire</option>
+                <option value="0">Seulement les Défaite</option>
+            </select>
+            <label for="pseudo"></label>
+            <input type="text" id ="pseudo" placeholder="Entrer un pseudonyme">
+            <button id="valider">Valider</button>
+        </form>
+        <table id="result">
+
+        </table>
+        <button id="retourMenu">Retour au Menu</button>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>
